@@ -2,7 +2,7 @@
 #define GRID_H
 
 // Includes
-#include <vector>
+#include "input.h"
 
 class GridClass {
 public:
