@@ -26,7 +26,7 @@ private:
 	int nVels;										// Number of velocities
 	double c_s;										// Speed of sound
 	std::vector<double> w;							// Weightings
-	std::vector<std::vector<int>> c;				// Direction vectors
+	std::vector<std::vector<int> > c;				// Direction vectors
 	std::vector<int> opposite;						// Opposite vectors
 
 	// Grid parameters
