@@ -34,6 +34,8 @@ GridClass::GridClass() {
 	f_n.resize(Nx * Ny * nVels, 0.0);
 	type.resize(Nx * Ny, eFluid);
 
+	u_in.resize(Ny * dims, 0.0);
+
 	initialiseGrid();
 }
 
@@ -66,7 +68,49 @@ void GridClass::initialiseGrid() {
 			if (type[id] != eFluid) {
 				BCVec.push_back(id);
 			}
+		}
 
+		// Set inlet velocity
+		for (int j = 0; j < Ny; j++) {
+			u_in[j * dims + eX] = ux0_p * Dt / Dx;
+			u_in[j * dims + eY] = uy0_p * Dt / Dx;
 		}
 	}
+
+	// Set initial velocity
+	for (int i = 0; i < Nx; i++) {
+		for (int j = 0; j < Ny; j++) {
+
+			int id = i * Ny + j;
+
+			u[id * dims + eX] = ux0_p * Dt / Dx;
+			u[id * dims + eY] = uy0_p * Dt / Dx;
+
+			if (type[id] == eWall) {
+				u[id * dims + eX] = 0.0;
+				u[id * dims + eY] = 0.0;
+			}
+		}
+	}
+
+	u_n = u;
+	rho_n = rho;
+
+	// Set f values to equilibrium
+	for (int i = 0; i < Nx; i++) {
+		for (int j = 0; j < Ny; j++) {
+
+			int id = i * Ny + j;
+
+			for (int v = 0; v < nVels; v++) {
+				f[id * nVels + v] = equilibrium(id, v);
+			}
+		}
+	}
+
+	f_n = f;
+}
+
+double GridClass::equilibrium(int id, int v) {
+	return 0.0;
 }

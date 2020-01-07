@@ -46,6 +46,9 @@ private:
 	std::vector<int> BCVec;							// Site IDs to apply BCs
 	std::vector<std::vector<double>> delU;			// Convective speed through boundary
 
+	// Other
+	std::vector<double> u_in;						// Inlet velocity profile
+
 public:
 
 	// LBM Methods
