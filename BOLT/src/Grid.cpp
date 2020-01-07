@@ -32,9 +32,41 @@ GridClass::GridClass() {
 	rho_n.resize(Nx * Ny, rho0);
 	f.resize(Nx * Ny * nVels, 0.0);
 	f_n.resize(Nx * Ny * nVels, 0.0);
+	type.resize(Nx * Ny, eFluid);
 
 	initialiseGrid();
 }
 
 void GridClass::initialiseGrid() {
+	for (int i = 0; i < Nx; i++) {
+		for (int j = 0; j < Ny; j++) {
+
+			int id = i * Ny + j;
+
+			// Left wall
+			if (i == 0) {
+				type[id] = eVelocity;
+			}
+
+			// Right wall
+			if (i == Nx - 1) {
+				type[id] = eConvective;
+			}
+
+			// Bottom wall
+			if (j == 0) {
+				type[id] = eVelocity;
+			}
+
+			// Top wall
+			if (j == Ny - 1) {
+				type[id] = eVelocity;
+			}
+
+			if (type[id] != eFluid) {
+				BCVec.push_back(id);
+			}
+
+		}
+	}
 }

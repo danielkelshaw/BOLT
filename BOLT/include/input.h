@@ -33,6 +33,9 @@ const int nSteps = static_cast<int>(std::round(tSim / tStep));
 // Set dimensions
 const int dims = 2;
 
+// Enumerations
+enum eLatType {eFluid, eWall, eVelocity, eConvective};
+
 // Macros
 #define SQ(x) ((x) * (x))
 #define CU(x) ((x) * (x) * (x))

@@ -40,6 +40,11 @@ private:
 	std::vector<double> rho_n;						// Density (start of timestep)
 	std::vector<double> f;							// Populations
 	std::vector<double> f_n;						// Populations (start of timestep)
+	std::vector<eLatType> type;						// Lattice type matrix
+
+	// Boundary conditions
+	std::vector<int> BCVec;							// Site IDs to apply BCs
+	std::vector<std::vector<double>> delU;			// Convective speed through boundary
 
 public:
 
