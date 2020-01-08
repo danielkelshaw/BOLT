@@ -112,5 +112,9 @@ void GridClass::initialiseGrid() {
 }
 
 double GridClass::equilibrium(int id, int v) {
-	return 0.0;
+
+	double C1 = SQ(u_n[id * dims + eX]) + SQ(u_n[id * dims + eY]);
+	double C2 = u_n[id * dims + eX] * c[v][eX] + u_n[id * dims + eY] * c[v][eY];
+
+	return rho_n[id] * w[v] * (1.0 + 3.0 * C2 + 4.5 * SQ(C2) - 1.5 * C1);
 }
