@@ -118,3 +118,16 @@ double GridClass::equilibrium(int id, int v) {
 
 	return rho_n[id] * w[v] * (1.0 + 3.0 * C2 + 4.5 * SQ(C2) - 1.5 * C1);
 }
+
+void GridClass::streamCollide(int i, int j, int id) {
+
+	for (int v = 0; v < nVels; v++) {
+		int src_id = ((i - c[v][eX] + Nx) % Nx) * Ny + ((j - c[v][eY] + Ny) % Ny);
+		f[id * nVels + v] = f_n[src_id * nVels + v] + omega * (equilibrium(src_id, v) - f_n[src_id * nVels + v]) + latticeForce(src_id, v);
+	}
+}
+
+double GridClass::latticeForce(int id, int v) {
+	// At the moment latticeForce is neglected for simplicity.
+	return 0.0;
+}
