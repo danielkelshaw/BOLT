@@ -64,6 +64,10 @@ private:
 	double latticeForce(int id, int v);				// Discretise lattice force
 	void macroscopic(int id);						// Calculate macroscopic quantities
 
+	void applyBC(int i, int j, int id);				// Apply BCs
+	void convectiveBC(int j, int id);				// Calculates f at boundary for eConvective
+	void convectiveSpeed();							// Calculate convective speed
+
 	void initialiseGrid();							// Initialise the grid
 };
 
