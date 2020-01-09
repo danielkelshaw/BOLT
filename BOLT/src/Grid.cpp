@@ -34,6 +34,9 @@ GridClass::GridClass() {
 	f_n.resize(Nx * Ny * nVels, 0.0);
 	type.resize(Nx * Ny, eFluid);
 
+	// Assuming right wall is eConvective for now...
+	delU.resize(Ny, std::vector<double>(dims, 0.0));
+
 	u_in.resize(Ny * dims, 0.0);
 
 	initialiseGrid();
@@ -130,4 +133,72 @@ void GridClass::streamCollide(int i, int j, int id) {
 double GridClass::latticeForce(int id, int v) {
 	// At the moment latticeForce is neglected for simplicity.
 	return 0.0;
+}
+
+void GridClass::lbmKernel() {
+	
+	convectiveSpeed();
+
+	f_n.swap(f);
+	u_n.swap(u);
+	rho_n.swap(rho);
+
+	// Iterate through all points
+	for (int i = 0; i < Nx; i++) {
+		for (int j = 0; j < Ny; j++) {
+
+			int id = i * Nx + j;
+
+			streamCollide(i, j, id);
+
+			if (type[id] == eFluid) {
+				macroscopic(id);
+			}
+		}
+	}
+
+	// Apply BCs to all points
+	for (int b = 0; b < BCVec.size(); b++) {
+
+		int id = BCVec[b];
+		int i = id / Ny;
+		int j = id - (i * Ny);
+
+		applyBC(i, j, id);
+		macroscopic(id);
+	}
+}
+
+void GridClass::convectiveSpeed() {
+
+	// Set u_out to zero
+	double u_out = 0.0;
+
+	// Iterate through outlet cells
+	for (int j = 0; j < Ny; j++) {
+		u_out = u[((Nx - 1) * Ny + j) * dims + eX];
+	}
+
+	// Average result
+	u_out /= static_cast<double>(Ny);
+
+	// Set delU
+	for (int j = 0; j < Ny; j++) {
+		delU[j][eX] = (-u_out / 2.0) * (3.0 * u[((Nx - 1) * Ny + j) * dims + eX] - 4.0 * u[((Nx - 2) * Ny + j) * dims + eX] + u[((Nx - 3) * Ny + j) * dims + eX]);
+		delU[j][eY] = (-u_out / 2.0) * (3.0 * u[((Nx - 1) * Ny + j) * dims + eY] - 4.0 * u[((Nx - 2) * Ny + j) * dims + eY] + u[((Nx - 3) * Ny + j) * dims + eY]);
+	}
+}
+
+void GridClass::convectiveBC(int j, int id) {
+
+	// Setting the f values assuming right wall is eConvective
+	f[id * nVels + 2] = f_n[id * nVels + 2] + 3.0 * w[2] * (delU[j][eX] * c[2][eX] + delU[j][eY] * c[2][eY]);
+	f[id * nVels + 6] = f_n[id * nVels + 6] + 3.0 * w[6] * (delU[j][eX] * c[6][eX] + delU[j][eY] * c[6][eY]);
+	f[id * nVels + 8] = f_n[id * nVels + 8] + 3.0 * w[8] * (delU[j][eX] * c[8][eX] + delU[j][eY] * c[8][eY]);
+}
+
+void GridClass::macroscopic(int id) {
+}
+
+void GridClass::applyBC(int i, int j, int id) {
 }
