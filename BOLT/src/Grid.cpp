@@ -198,6 +198,22 @@ void GridClass::convectiveBC(int j, int id) {
 }
 
 void GridClass::macroscopic(int id) {
+
+	// Reset values
+	rho[id] = 0.0;
+	u[id * dims + eX] = 0.0;
+	u[id * dims + eY] = 0.0;
+
+	// Iterate through to find rho / momentum
+	for (int v = 0; v < nVels; v++) {
+		rho[id] += f[id * nVels + v];
+		u[id * dims + eX] += c[v][eX] * f[id * nVels + v];
+		u[id * dims + eY] += c[v][eY] * f[id * nVels + v];
+	}
+
+	// Divide momentum by rho to calculate velocity
+	u[id * dims + eX] = u[id * dims + eX] / rho[id];
+	u[id * dims + eY] = u[id * dims + eY] / rho[id];
 }
 
 void GridClass::applyBC(int i, int j, int id) {
