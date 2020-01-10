@@ -217,4 +217,74 @@ void GridClass::macroscopic(int id) {
 }
 
 void GridClass::applyBC(int i, int j, int id) {
+
+	eDirectionType normalDirection;
+	std::vector<int> normalVector = getNormalVector(i, j, normalDirection);
+
+	switch(type[id]) {
+
+		case eWall:
+
+			u_n[id * dims + eX] = 0.0;
+			u_n[id * dims + eY] = 0.0;
+
+			regularisedBC(i, j, id, normalVector, normalDirection);
+			break;
+
+		case eConvective:
+
+			convectiveBC(j, id);
+			break;
+
+		case eFluid:
+
+			break;
+
+		case eVelocity:
+			// Not implemented yet...
+			break;
+	}
+}
+
+void GridClass::regularisedBC(int i, int j, int id, std::vector<int> &normalVector, eDirectionType normalDirection) {
+}
+
+std::vector<int> GridClass::getNormalVector(int i, int j, eDirectionType &normalDirection) {
+
+	std::vector<int> normalVector(dims, 0);
+
+	// Get normal vector in x
+	if (i == 0) {
+		normalVector[eX] = 1;
+		normalDirection = eX;
+	}
+	else if (i == Nx - 1) {
+		normalVector[eX] = -1;
+		normalDirection = eX;
+	}
+
+	// Get normal vector in y
+	if (j == 0) {
+		normalVector[eY] = 1;
+		normalDirection = eY;
+	}
+	else if (j == Ny - 1) {
+		normalVector[eY] = -1;
+		normalDirection = eY;
+	}
+
+	// Check for corners
+	if (normalVector[eX] != 0 && normalVector[eY] != 0) {
+
+		if (type[(i + normalVector[eX]) * Ny + j] == eFluid) {
+			normalVector[eY] = 0; 
+			normalDirection = eX;
+		}
+		else if (type[i * Ny + j + normalVector[eY]] == eFluid) {
+			normalVector[eX] = 0;
+			normalDirection = eY;
+		}
+	}
+
+	return normalVector;
 }

@@ -57,18 +57,23 @@ public:
 private:
 
 	// LBM Methods
-	void lbmKernel();								// Main LBM Kernel
-	void streamCollide(int i, int j, int id);		// Stream/Collide: Pull algorithm
+	void lbmKernel();												// Main LBM Kernel
+	void streamCollide(int i, int j, int id);						// Stream/Collide: Pull algorithm
 
-	double equilibrium(int id, int v);				// Equilibrium function
-	double latticeForce(int id, int v);				// Discretise lattice force
-	void macroscopic(int id);						// Calculate macroscopic quantities
+	double equilibrium(int id, int v);								// Equilibrium function
+	double latticeForce(int id, int v);								// Discretise lattice force
+	void macroscopic(int id);										// Calculate macroscopic quantities
 
-	void applyBC(int i, int j, int id);				// Apply BCs
-	void convectiveBC(int j, int id);				// Calculates f at boundary for eConvective
-	void convectiveSpeed();							// Calculate convective speed
+	void applyBC(int i, int j, int id);								// Apply BCs
+	void convectiveBC(int j, int id);								// Calculates f at boundary for eConvective
+	void convectiveSpeed();											// Calculate convective speed
+	void regularisedBC(int i, int j, int id,
+			std::vector<int> &normalVector, eDirectionType normal);	// Regularised BC
 
-	void initialiseGrid();							// Initialise the grid
+	void initialiseGrid();											// Initialise the grid
+
+	std::vector<int> getNormalVector(int i, int j, eDirectionType &normalDirection);
+
 };
 
 #endif
