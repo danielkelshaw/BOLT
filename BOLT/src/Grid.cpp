@@ -148,7 +148,7 @@ void GridClass::lbmKernel() {
 	for (int i = 0; i < Nx; i++) {
 		for (int j = 0; j < Ny; j++) {
 
-			int id = i * Nx + j;
+			int id = i * Ny + j;
 
 			streamCollide(i, j, id);
 
@@ -364,4 +364,8 @@ std::vector<int> GridClass::getNormalVector(int i, int j, eDirectionType &normal
 	}
 
 	return normalVector;
+}
+
+void GridClass::solver() {
+	lbmKernel();
 }
