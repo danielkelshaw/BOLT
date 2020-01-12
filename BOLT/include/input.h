@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <numeric>
 
 // Set resolution
 const int resolution = 1;
@@ -40,5 +41,6 @@ enum eLatType {eFluid, eWall, eVelocity, eConvective};
 // Macros
 #define SQ(x) ((x) * (x))
 #define CU(x) ((x) * (x) * (x))
+#define QU(x) ((x) * (x) * (x) * (x))
 
 #endif
