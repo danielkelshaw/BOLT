@@ -1,5 +1,6 @@
 // Includes
 #include "../include/Grid.h"
+#include "../include/Utils.h"
 
 GridClass::GridClass() {
 
@@ -247,6 +248,82 @@ void GridClass::applyBC(int i, int j, int id) {
 }
 
 void GridClass::regularisedBC(int i, int j, int id, std::vector<int> &normalVector, eDirectionType normalDirection) {
+
+	// Extrapolate if corner
+	if (normalVector[eX] != 0 && normalVector[eY] != 0) {
+
+		if (type[id] == eVelocity || type[id] == eWall)
+			rho_n[id] = Utils::extrapolate(rho, normalVector, 1, i, j);
+	}
+
+	// If normal edge
+	else {
+
+		double fplus = 0.0, fzero = 0.0;
+
+		// Loop through velocities
+		for (int v = 0; v < nVels; v++) {
+
+			// If normal is opposite then add to fplus
+			if (c[v][normalDirection] == -normalVector[normalDirection]) {
+				fplus += f[id * nVels + v];
+			}
+
+			// If it is perpendicular to wall then add to fzero
+			else if (c[v][normalDirection] == 0) {
+				fzero += f[id * nVels + v];
+			}
+		}
+
+		// Velocity condition
+		if (type[id] == eVelocity || type[id] == eWall) {
+			rho_n[id] = (2.0 * fplus + fzero) / (1.0 - normalVector[normalDirection] * u_n[id * dims + normalDirection]);
+		}
+	}
+
+	// Declare stresses
+	double Sxx = 0.0, Syy = 0.0, Sxy = 0.0;
+
+	// Update f values
+	for (int v = 0; v < nVels; v++) {
+
+		// Get feq
+		double feq = equilibrium(id, v);
+
+		// If corner then unknowns share at least one of normal components
+		if (normalVector[eX] != 0 && normalVector[eY] != 0) {
+			if (c[v][eX] == normalVector[eX] || c[v][eY] == normalVector[eY]) {
+
+				// If buried link just set to feq
+				if (std::inner_product(normalVector.begin(), normalVector.end(), c[v].begin(), 0) == 0) {
+					f[id * nVels + v] = feq;
+				}
+				else {
+					f[id * nVels + v] = feq + (f[id * nVels + opposite[v]] - equilibrium(id, opposite[v]));
+				}
+			}
+		}
+
+		// If other then unknowns share the normal vector component
+		else {
+			if (c[v][normalDirection] == normalVector[normalDirection]) {
+				f[id * nVels + v] = feq + (f[id * nVels + opposite[v]] - equilibrium(id, opposite[v]));
+			}
+		}
+
+		// Store off-equilibrium
+		double fneq = f[id * nVels + v] - feq;
+
+		// Compute off-equilbrium stress components
+		Sxx += c[v][eX] * c[v][eX] * fneq;
+		Syy += c[v][eY] * c[v][eY] * fneq;
+		Sxy += c[v][eX] * c[v][eY] * fneq;
+	}
+
+	// Compute regularised non-equilibrium components and add to feq
+	for (int v = 0; v < nVels; v++) {
+		f[id * nVels + v] = equilibrium(id, v) + (w[v] / (2.0 * QU(c_s))) * (((SQ(c[v][eX]) - SQ(c_s)) * Sxx) + ((SQ(c[v][eY]) - SQ(c_s)) * Syy) + (2.0 * c[v][eX] * c[v][eY] * Sxy));
+	}
 }
 
 std::vector<int> GridClass::getNormalVector(int i, int j, eDirectionType &normalDirection) {
