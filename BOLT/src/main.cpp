@@ -5,7 +5,11 @@ int main() {
 
 	GridClass grid;
 
-	grid.solver();
+	for (grid.t = 0; grid.t <= nSteps; grid.t++) {
+		grid.solver();
 
-	std::cout << "Iteration run succesfully..." << std::endl;
+		if (grid.t % 250 == 0) {
+			std::cout << "Step: " << grid.t << "/" << nSteps << std::endl;
+		}
+	}
 }
