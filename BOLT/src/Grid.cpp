@@ -369,3 +369,32 @@ std::vector<int> GridClass::getNormalVector(int i, int j, eDirectionType &normal
 void GridClass::solver() {
 	lbmKernel();
 }
+
+void GridClass::writeInfo() {
+
+	double maxVel = 0.0;
+
+	for (int i = 0; i < Nx; i++) {
+		for (int j = 0; j < Ny; j++) {
+
+			int id = i * Ny + j;
+
+			double vel = std::sqrt(SQ(u[id * dims + eX]) + SQ(u[id * dims + eY]));
+
+			if (vel > maxVel) {
+				maxVel = vel;
+			}
+		}
+	}
+
+	double maxRe = (maxVel * Dx / Dt) * ref_L / ref_nu;
+
+	std::cout << std::endl << std::endl;
+	
+	std::cout << "Time step " << t << " of " << nSteps << std::endl;
+	std::cout << "Simulation has done " << t * Dt << " of " << nSteps * Dt << " seconds" << std::endl;
+
+	std::cout << "Max Velocity = " << maxVel << std::endl;
+	std::cout << "Max Velocity (m/s) = " << maxVel * Dx / Dt << std::endl;
+	std::cout << "Max Reynolds Number = " << maxRe << std::endl;
+}

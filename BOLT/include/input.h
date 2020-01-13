@@ -31,6 +31,13 @@ const double omega = 1.0 / (nu_p * tStep / (std::pow(1.0 / std::sqrt(3.0), 2.0) 
 const double tSim = 4.0;
 const int nSteps = static_cast<int>(std::round(tSim / tStep));
 
+// Reference values
+const double ref_nu = nu_p;
+const double ref_rho = rho_p;
+const double ref_P = 100000.0;
+const double ref_L = 0.057;
+const double ref_U = ux0_p;
+
 // Set dimensions
 const int dims = 2;
 
