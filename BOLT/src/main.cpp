@@ -9,7 +9,7 @@ int main() {
 		grid.solver();
 
 		if (grid.t % 250 == 0) {
-			std::cout << "Step: " << grid.t << "/" << nSteps << std::endl;
+			grid.writeInfo();
 		}
 	}
 }

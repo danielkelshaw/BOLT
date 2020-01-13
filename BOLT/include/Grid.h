@@ -54,6 +54,8 @@ public:
 	// LBM Methods
 	void solver();									// Main solver
 
+	void writeInfo();
+
 private:
 
 	// LBM Methods
