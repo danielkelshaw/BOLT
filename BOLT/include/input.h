@@ -15,7 +15,7 @@ const int Nx = 256;     // Number of lattice sites in x-direction
 const int Ny = 128;     // Number of lattice sites in y-direction
 
 // Physical domain
-const double height_p = 1.0;
+const double height_p = 1.0;        // Height of domain (m)
 const double rho_p = 1.0;           // Fluid density (kg/m^3)
 const double nu_p = 1.5111e-2;      // Fluid viscosity (m^2/s)
 
@@ -28,6 +28,7 @@ const double uy0_p = 0.0;           // Initial y-veloicty (m/s)
 const double tStep = 5e-5 / (resolution * resolution);
 const double omega = 1.0 / (nu_p * tStep / (std::pow(1.0 / std::sqrt(3.0), 2.0) * std::pow(height_p / (Ny - 1), 2.0)) + 0.5);
 
+// Set simulation time
 const double tSim = 4.0;
 const int nSteps = static_cast<int>(std::round(tSim / tStep));
 

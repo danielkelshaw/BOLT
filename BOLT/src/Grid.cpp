@@ -44,6 +44,8 @@ GridClass::GridClass() {
 }
 
 void GridClass::initialiseGrid() {
+
+	// Iterate through all points - set types
 	for (int i = 0; i < Nx; i++) {
 		for (int j = 0; j < Ny; j++) {
 
@@ -81,7 +83,7 @@ void GridClass::initialiseGrid() {
 		}
 	}
 
-	// Set initial velocity
+	// Iterate through all points - set initial velocity
 	for (int i = 0; i < Nx; i++) {
 		for (int j = 0; j < Ny; j++) {
 
@@ -97,6 +99,7 @@ void GridClass::initialiseGrid() {
 		}
 	}
 
+	// Set values at beginning of tStep
 	u_n = u;
 	rho_n = rho;
 
@@ -117,6 +120,8 @@ void GridClass::initialiseGrid() {
 
 double GridClass::equilibrium(int id, int v) {
 
+	// Implementation of 'Equilibrium Distribution' equation
+
 	double C1 = SQ(u_n[id * dims + eX]) + SQ(u_n[id * dims + eY]);
 	double C2 = u_n[id * dims + eX] * c[v][eX] + u_n[id * dims + eY] * c[v][eY];
 
@@ -124,6 +129,8 @@ double GridClass::equilibrium(int id, int v) {
 }
 
 void GridClass::streamCollide(int i, int j, int id) {
+
+	// Implementation of 'Pull' algorithm allowing streaming/colliding in one step
 
 	for (int v = 0; v < nVels; v++) {
 		int src_id = ((i - c[v][eX] + Nx) % Nx) * Ny + ((j - c[v][eY] + Ny) % Ny);
@@ -137,9 +144,12 @@ double GridClass::latticeForce(int id, int v) {
 }
 
 void GridClass::lbmKernel() {
+
+	// Runs one step of LBM Kernel
 	
 	convectiveSpeed();
 
+	// Set values at start of tStep
 	f_n.swap(f);
 	u_n.swap(u);
 	rho_n.swap(rho);
@@ -200,6 +210,8 @@ void GridClass::convectiveBC(int j, int id) {
 
 void GridClass::macroscopic(int id) {
 
+	// Calculates macroscopic values
+
 	// Reset values
 	rho[id] = 0.0;
 	u[id * dims + eX] = 0.0;
@@ -218,6 +230,8 @@ void GridClass::macroscopic(int id) {
 }
 
 void GridClass::applyBC(int i, int j, int id) {
+
+	// Applies boundary conditions to all cells
 
 	eDirectionType normalDirection;
 	std::vector<int> normalVector = getNormalVector(i, j, normalDirection);
@@ -248,6 +262,8 @@ void GridClass::applyBC(int i, int j, int id) {
 }
 
 void GridClass::regularisedBC(int i, int j, int id, std::vector<int> &normalVector, eDirectionType normalDirection) {
+
+	// Implementation of method to regularise the boundary conditions - taking corners into account
 
 	// Extrapolate if corner
 	if (normalVector[eX] != 0 && normalVector[eY] != 0) {
@@ -372,13 +388,16 @@ void GridClass::solver() {
 
 void GridClass::writeInfo() {
 
+	// Initialise maxVel to zero
 	double maxVel = 0.0;
 
+	// Iterate over all points to determine maxVel
 	for (int i = 0; i < Nx; i++) {
 		for (int j = 0; j < Ny; j++) {
 
 			int id = i * Ny + j;
 
+			// Calculate basic vector magnitude
 			double vel = std::sqrt(SQ(u[id * dims + eX]) + SQ(u[id * dims + eY]));
 
 			if (vel > maxVel) {
@@ -387,8 +406,10 @@ void GridClass::writeInfo() {
 		}
 	}
 
+	// Calculate maxRe
 	double maxRe = (maxVel * Dx / Dt) * ref_L / ref_nu;
 
+	// Output values
 	std::cout << std::endl << std::endl;
 	
 	std::cout << "Time step " << t << " of " << nSteps << std::endl;

@@ -3,6 +3,8 @@
 
 double Utils::extrapolate(const std::vector<double> &vec, const std::vector<int> &normal, int order, int i, int j, int d, int dims) {
 
+	// Implements basic methods for extrapolation
+
 	if (order == 0) {
 
 		int i1 = i + normal[eX];
