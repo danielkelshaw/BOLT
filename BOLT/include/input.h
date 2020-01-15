@@ -3,6 +3,8 @@
 
 // Include relevant headers
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <cmath>
 #include <vector>
 #include <numeric>
@@ -41,6 +43,9 @@ const double ref_U = ux0_p;
 
 // Set dimensions
 const int dims = 2;
+
+// Precision for outputs
+const int PRECISION = 10;
 
 // Enumerations
 enum eDirectionType {eX, eY};

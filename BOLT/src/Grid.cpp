@@ -306,6 +306,74 @@ void GridClass::writeInfo() {
 	std::cout << "Max Reynolds Number = " << maxRe << std::endl;
 }
 
+// Write information to VTK file
+void GridClass::writeVTK() {
+
+	// Create file
+	std::ofstream output;
+	output.precision(PRECISION);
+	output.open("Results/VTK/Fluid." + std::to_string(t) + ".vtk");
+
+	// Write VTK header
+	output << "# vtk DataFile Version 3.0\n";
+	output << "FLUID\n";
+	output << "ASCII\n";
+	output << "DATASET RECTILINEAR_GRID\n";
+	output << "DIMENSIONS " << Nx << " " << Ny << " 1\n";
+
+	// Write out x-coordinates
+	output << "X_COORDINATES " << Nx << " double\n";
+	for (int i = 0; i < Nx; i++)
+		output << i * Dx << " ";
+
+	output << std::endl;
+
+	// Write out y-coordinates
+	output << "Y_COORDINATES " << Ny << " double\n";
+	for (int j = 0; j < Ny; j++)
+		output << j * Dx << " ";
+
+	output << std::endl;
+
+	// Write out z-coordinates
+	output << "Z_COORDINATES " << 1 << " double\n";
+	output << 0;
+
+	output << std::endl;
+
+	// Point data
+	output << "POINT_DATA " << Nx * Ny << "\n";
+
+	// Write density
+	output << "SCALARS Density double 1\n";
+	output << "LOOKUP_TABLE default\n";
+	for (int j = 0; j < Ny; j++) {
+		for (int i = 0; i < Nx; i++) {
+			output << rho[i * Ny + j] * Drho << "\n";
+		}
+	}
+
+	// Write pressure
+	output << "SCALARS Pressure double 1\n";
+	output << "LOOKUP_TABLE default\n";
+	for (int j = 0; j < Ny; j++) {
+		for (int i = 0; i < Nx; i++) {
+			output << ref_P + (rho[i * Ny + j] - rho_p / Drho) * SQ(c_s) * Dm / (Dx * SQ(Dt)) << "\n";
+		}
+	}
+
+	// Write velocity
+	output << "VECTORS Velocity double\n";
+	for (int j = 0; j < Ny; j++) {
+		for (int i = 0; i < Nx; i++) {
+			output << u[(i * Ny + j) * dims + eX] * (Dx / Dt) << " " << u[(i * Ny + j) * dims + eY] * (Dx / Dt) << " 0\n";
+		}
+	}
+
+	// Close file
+	output.close();
+}
+
 // Initialise grid values
 void GridClass::initialiseGrid() {
 

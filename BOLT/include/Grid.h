@@ -55,6 +55,7 @@ public:
 	// LBM Methods
 	void solver();      // Main solver
 	void writeInfo();   // Write info to screen
+	void writeVTK();    // Write info to .VTK file
 
 private:
 
