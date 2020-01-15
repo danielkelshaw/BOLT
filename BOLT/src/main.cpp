@@ -11,6 +11,7 @@ int main() {
 		// Write out information every 250 tSteps
 		if (grid.t % 250 == 0) {
 			grid.writeInfo();
+			grid.writeVTK();
 		}
 	}
 }
