@@ -8,6 +8,7 @@
 #include <cmath>
 #include <vector>
 #include <numeric>
+#include <chrono>
 
 // Set resolution
 const int resolution = 1;

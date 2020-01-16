@@ -295,11 +295,16 @@ void GridClass::writeInfo() {
 	// Calculate maxRe
 	double maxRe = (maxVel * Dx / Dt) * ref_L / ref_nu;
 
+	// Calculate timings
+	loopTime = std::chrono::steady_clock::now() - startTime;
+	loopTime /= t;
+
 	// Output values
 	std::cout << std::endl << std::endl;
 	
 	std::cout << "Time step " << t << " of " << nSteps << std::endl;
 	std::cout << "Simulation has done " << t * Dt << " of " << nSteps * Dt << " seconds" << std::endl;
+	std::cout << "MLUPS = " << Nx * Ny / (1000000.0 * loopTime.count()) << std::endl;
 
 	std::cout << "Max Velocity = " << maxVel << std::endl;
 	std::cout << "Max Velocity (m/s) = " << maxVel * Dx / Dt << std::endl;
@@ -474,6 +479,10 @@ GridClass::GridClass() {
 	Dt = (nu / nu_p) * SQ(Dx);
 	Dm = (rho_p / rho0) * CU(Dx);
 	Drho = (rho_p / rho0);
+
+	// Set timings
+	startTime = std::chrono::steady_clock::now();
+	// loopTime = 0.0;
 
 	// Set array size and initialise
 	u.resize(Nx * Ny * dims, 0.0);
