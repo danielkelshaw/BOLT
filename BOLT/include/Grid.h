@@ -50,6 +50,10 @@ private:
 	// Other
 	std::vector<double> u_in;               // Inlet velocity profile
 
+	// Timings
+	std::chrono::time_point<std::chrono::steady_clock> startTime;   // Time when clock is called
+	std::chrono::duration<double> loopTime;                         // Average loop time
+
 public:
 
 	// LBM Methods
