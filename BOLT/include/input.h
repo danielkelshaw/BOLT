@@ -34,6 +34,10 @@ const double omega = 1.0 / (nu_p * tStep / (std::pow(1.0 / std::sqrt(3.0), 2.0) 
 const double tSim = 4.0;
 const int nSteps = static_cast<int>(std::round(tSim / tStep));
 
+// Set output frequency
+const int tinfo = nSteps / 10000;
+const int tVTK = nSteps / 100;
+
 // Reference values
 const double ref_nu = nu_p;
 const double ref_rho = rho_p;

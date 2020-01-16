@@ -8,9 +8,13 @@ int main() {
 	for (grid.t = 0; grid.t <= nSteps; grid.t++) {
 		grid.solver();
 
-		// Write out information every 250 tSteps
-		if (grid.t % 250 == 0) {
+		// Write out information every tinfo steps
+		if (grid.t % tinfo == 0) {
 			grid.writeInfo();
+		}
+
+		// Write VTK every tVTK steps
+		if (grid.t % tVTK == 0) {
 			grid.writeVTK();
 		}
 	}
