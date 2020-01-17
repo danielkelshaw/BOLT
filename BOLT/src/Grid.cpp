@@ -10,7 +10,9 @@ void GridClass::solver() {
 // Main LBM Kernel
 void GridClass::lbmKernel() {
 	
-	convectiveSpeed();
+	if (WALL_RIGHT == eConvective) {
+		convectiveSpeed();
+	}
 
 	// Set values at start of tStep
 	f_n.swap(f);
@@ -403,7 +405,7 @@ void GridClass::initialiseGrid() {
 					type[id] = eWall;	
 				}
 				else {
-					type[id] = eVelocity
+					type[id] = WALL_LEFT;
 				}
 				
 			}
@@ -415,18 +417,18 @@ void GridClass::initialiseGrid() {
 					type[id] = eWall;
 				}
 				else {
-					type[id] = eConvective;
+					type[id] = WALL_RIGHT;
 				}
 			}
 
 			// Bottom wall
 			if (j == 0) {
-				type[id] = eVelocity;
+				type[id] = WALL_BOTTOM;
 			}
 
 			// Top wall
 			if (j == Ny - 1) {
-				type[id] = eVelocity;
+				type[id] = WALL_TOP;
 			}
 
 			if (type[id] != eFluid) {
