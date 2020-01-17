@@ -382,6 +382,14 @@ void GridClass::writeVTK() {
 // Initialise grid values
 void GridClass::initialiseGrid() {
 
+#ifdef BLOCK
+	int blockIdx = round((Ny - 1) * BLOCK) + 1;
+	double blockH = height_p * BLOCK;
+#else
+	int blockIdx = 0;
+	double blockH = 0.0;
+#endif
+
 	// Iterate through all points - set types
 	for (int i = 0; i < Nx; i++) {
 		for (int j = 0; j < Ny; j++) {
@@ -412,13 +420,32 @@ void GridClass::initialiseGrid() {
 				BCVec.push_back(id);
 			}
 		}
-
-		// Set inlet velocity
-		for (int j = 0; j < Ny; j++) {
-			u_in[j * dims + eX] = ux0_p * Dt / Dx;
-			u_in[j * dims + eY] = uy0_p * Dt / Dx;
-		}
 	}
+
+	// Set inlet velocity
+	for (int j = 0; j < Ny; j++) {
+
+#ifndef PROFILE
+
+		u_in[j * dims + eX] = ux0_p * Dt / Dx;
+		u_in[j * dims + eY] = uy0_p * Dt / Dx;
+
+#else
+		if (PROFILE == eParabolic) {
+
+			double R = (height_p - blockH) / 2.0;
+			double yPos = j * Dx - blockH - R;
+
+			u_in[j * dims + eX] = 1.5 * (ux0_p * Dt / Dx) * (1.0 - SQ(yPos / R));
+			u_in[j * dims + eY] = 1.5 * (uy0_p * Dt / Dx) * (1.0 - SQ(yPos / R));
+		}
+		else if (PROFILE == eBoundaryLayer) {
+			std::cout << "eBoundaryLayer not yet supported..." << std::endl;
+			exit(-1);
+		}
+#endif
+	}
+
 
 	// Iterate through all points - set initial velocity
 	for (int i = 0; i < Nx; i++) {
@@ -426,8 +453,17 @@ void GridClass::initialiseGrid() {
 
 			int id = i * Ny + j;
 
+#ifdef PROFILE
+
+			u[id * dims + eX] = u_in[j * dims + eX];
+			u[id * dims + eY] = u_in[j * dims + eY];
+
+#else
+
 			u[id * dims + eX] = ux0_p * Dt / Dx;
 			u[id * dims + eY] = uy0_p * Dt / Dx;
+
+#endif
 
 			if (type[id] == eWall) {
 				u[id * dims + eX] = 0.0;

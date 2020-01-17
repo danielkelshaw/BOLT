@@ -22,10 +22,12 @@ const double height_p = 1.0;        // Height of domain (m)
 const double rho_p = 1.0;           // Fluid density (kg/m^3)
 const double nu_p = 1.5111e-2;      // Fluid viscosity (m^2/s)
 
+#define PROFILE eParabolic          // Inlet velocity profile
+// #define BLOCK (1.0 / 3.0)			// Blockage ratio
+
 // Initial conditions
 const double ux0_p = 5.0;           // Initial x-velocity (m/s)
 const double uy0_p = 0.0;           // Initial y-veloicty (m/s)
-
 
 // Set time step
 const double tStep = 5e-5 / (resolution * resolution);
@@ -37,7 +39,7 @@ const int nSteps = static_cast<int>(std::round(tSim / tStep));
 
 // Set output frequency
 const int tinfo = nSteps / 10000;
-const int tVTK = nSteps / 100;
+const int tVTK = nSteps / 1000;
 
 // Reference values
 const double ref_nu = nu_p;
@@ -55,6 +57,7 @@ const int PRECISION = 10;
 // Enumerations
 enum eDirectionType {eX, eY};
 enum eLatType {eFluid, eWall, eVelocity, eConvective};
+enum eProfile {eParabolic, eBoundaryLayer};
 
 // Macros
 #define SQ(x) ((x) * (x))
