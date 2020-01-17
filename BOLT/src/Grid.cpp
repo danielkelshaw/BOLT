@@ -398,12 +398,25 @@ void GridClass::initialiseGrid() {
 
 			// Left wall
 			if (i == 0) {
-				type[id] = eVelocity;
+
+				if (j < blockIdx) {
+					type[id] = eWall;	
+				}
+				else {
+					type[id] = eVelocity
+				}
+				
 			}
 
 			// Right wall
 			if (i == Nx - 1) {
-				type[id] = eConvective;
+
+				if (j < blockIdx) {
+					type[id] = eWall;
+				}
+				else {
+					type[id] = eConvective;
+				}
 			}
 
 			// Bottom wall
