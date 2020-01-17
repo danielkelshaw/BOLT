@@ -22,8 +22,13 @@ const double height_p = 1.0;        // Height of domain (m)
 const double rho_p = 1.0;           // Fluid density (kg/m^3)
 const double nu_p = 1.5111e-2;      // Fluid viscosity (m^2/s)
 
+#define WALL_LEFT    eVelocity      // Boundary condition at left wall
+#define WALL_RIGHT   eConvective    // Boundary condition at right wall
+#define WALL_BOTTOM  eVelocity      // Boundary condition at bottom wall
+#define WALL_TOP     eVelocity      // Boundary condition at top wall
+
 #define PROFILE eParabolic          // Inlet velocity profile
-// #define BLOCK (1.0 / 3.0)			// Blockage ratio
+#define BLOCK (1.0 / 3.0)			// Blockage ratio
 
 // Initial conditions
 const double ux0_p = 5.0;           // Initial x-velocity (m/s)
