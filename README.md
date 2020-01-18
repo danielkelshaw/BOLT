@@ -1,5 +1,4 @@
-# BOLT
-*Lattice Boltzmann Simulator*
+# **BOLT:** Lattice Boltzmann Simulator
 
 ### **Compilation Instructions:**
 From within the ```BOLT``` directory enter the command:
@@ -15,5 +14,3 @@ The majority of user-defined variables are stored in: ```BOLT/include/input.h```
 
 ### **Future Plans:**
 The next major step for this project is the inclusion of *Immersed Boundary Conditions* in order to allow for simulation of flow around objects within the channel - adding real value to the simulator.
-
-
