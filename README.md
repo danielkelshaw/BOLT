@@ -8,9 +8,10 @@ From within the ```BOLT``` directory enter the command:
 
 This will generate an output file: ```a.out```
 
-**Running the Simulator:** 
+**Run the Simulator:** ```./a.out```
 
-```./a.out```
+### **Altering Parameters:**
+The majority of user-defined variables are stored in: ```BOLT/include/input.h``` - upon altering any parameter the code needs to be recompiled before running to ensure changes are reflected in the output.
 
 ### **Future Plans:**
 The next major step for this project is the inclusion of *Immersed Boundary Conditions* in order to allow for simulation of flow around objects within the channel - adding real value to the simulator.
