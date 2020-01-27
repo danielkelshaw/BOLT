@@ -4,6 +4,9 @@
 // Includes
 #include "Grid.h"
 
+// Forward declaration
+class GridClass;
+
 class ObjectsClass {
 
 // constructors / destructors
@@ -19,13 +22,20 @@ public:
 // public members
 public:
 
-    GridClass *gPtr;    // pointer to grid
+    GridClass *gridPtr;    // pointer to grid
     bool hasIBM;        // flag say if IBM bodies
 
 // private members
 private:
 
     std::vector<std::vector<size_t>> idxIBM; // vector containing body/node index for every node
+
+    // Sub-iteration parameters
+    int subIt;
+    double relax;
+    double subRes;
+    double subNum;
+    double subDen;
 
 // public methods
 public:
