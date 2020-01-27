@@ -3,8 +3,16 @@
 
 // Includes
 #include "input.h"
+#include "Objects.h"
+
+// Forward declaration
+class ObjectsClass;
 
 class GridClass {
+
+    // Friend classes
+    friend class ObjectsClass;
+
 public:
 
     GridClass();              // Default constructor
@@ -14,6 +22,9 @@ public:
 
     // Grid parameters
     int t;                    // Time step
+
+    // Object Pointer
+    ObjectsClass *objectPtr;
 
     // Scaling parameters
     double Dx;                // Length scaling
