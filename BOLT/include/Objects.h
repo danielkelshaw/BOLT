@@ -3,9 +3,11 @@
 
 // Includes
 #include "Grid.h"
+#include "IBMBody.h"
 
 // Forward declaration
 class GridClass;
+class IBMBodyClass;
 
 class ObjectsClass {
 
@@ -29,6 +31,7 @@ public:
 private:
 
     std::vector<std::vector<size_t>> idxIBM; // vector containing body/node index for every node
+    std::vector<IBMBodyClass> ibmBody;
 
     // Sub-iteration parameters
     int subIt;

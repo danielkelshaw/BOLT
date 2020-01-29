@@ -63,6 +63,7 @@ const int PRECISION = 10;
 enum eDirectionType {eX, eY};
 enum eLatType {eFluid, eWall, eVelocity, eConvective};
 enum eProfile {eParabolic, eBoundaryLayer};
+enum eBodyType {eCircle};
 
 // Macros
 #define SQ(x) ((x) * (x))
