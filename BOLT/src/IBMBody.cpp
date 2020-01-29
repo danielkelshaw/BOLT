@@ -8,8 +8,10 @@ IBMBodyClass::IBMBodyClass(ObjectsClass *objects, int bodyID, const std::vector<
 	ID = bodyID;
 	bodyType = eCircle;
 
+	// count number of nodes
 	int numNodes = static_cast<int>(std::floor(2.0 * M_PI * radius / objectPtr->gridPtr->Dx));
 
+	// at the moment this position doesnt do anything - will be passed to a node class
 	std::vector<double> position(dims);
 
 	for (int i = 0; i < numNodes; i++) {

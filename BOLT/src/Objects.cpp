@@ -7,6 +7,13 @@ void ObjectsClass::readGeometry() {
 	std::ifstream file;
 	file.open("input/geometry.config", std::ios::in);
 
+	// handle failure to open file
+	if (!file.is_open()) {
+		std::cout << "Error opening geometry config file..." << std::endl;
+		exit(-1);
+	}
+
+	// skip comments in config file
 	std::streamoff fileOffset;
 	std::string line;
 	file.seekg(std::ios::beg);
@@ -21,6 +28,7 @@ void ObjectsClass::readGeometry() {
 
 	std::string bodyCase;
 
+	// read in geometries
 	int bodyID = 0;
 	while (file) {
 

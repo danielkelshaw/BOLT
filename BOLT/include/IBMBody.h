@@ -11,17 +11,20 @@ class ObjectsClass;
 // IBMBody Class
 class IBMBodyClass {
 
+// constructors / destructors
 public:
 
-	// defaul constructor / destructor
+	// default constructor / destructor
 	IBMBodyClass() {};
 	~IBMBodyClass() {};
 
 	// custom constructor for circle case
 	IBMBodyClass(ObjectsClass *objects, int bodyID, const std::vector<double> &pos, double radius);
 
+// public members
 public:
 
+// private members
 private:
 
 	ObjectsClass *objectPtr;
