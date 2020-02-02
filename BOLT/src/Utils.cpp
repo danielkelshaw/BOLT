@@ -37,3 +37,18 @@ double Utils::extrapolate(const std::vector<double> &vec, const std::vector<int>
         exit(-1);
     }
 }
+
+double Utils::diracDelta(double dist) {
+
+    double absDist = fabs(dist);
+
+    if (absDist > 1.5) {
+        return 0.0;
+    }
+    else if (absDist > 0.5) {
+        return (5.0 - 3.0 * absDist - sqrt(-3.0 * SQ(1.0 - absDist) + 1.0)) / 6.0;
+    }
+    else {
+        return (1.0 + sqrt(1.0 - 3.0 * SQ(absDist))) / 3.0;
+    }
+}

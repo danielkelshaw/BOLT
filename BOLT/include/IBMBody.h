@@ -8,10 +8,13 @@
 
 // forward declarations
 class ObjectsClass;
-class IBMNodeClass
+class IBMNodeClass;
 
 // IBMBody Class
 class IBMBodyClass {
+
+	friend class ObjectsClass;
+	friend class IBMNodeClass;
 
 // constructors / destructors
 public:
@@ -36,6 +39,5 @@ private:
 
 	std::vector<IBMNodeClass> nodes;
 };
-
 
 #endif

@@ -85,8 +85,10 @@ void GridClass::macroscopic(int id) {
 
 // Calculate lattice force
 double GridClass::latticeForce(int id, int v) {
-    // At the moment latticeForce is neglected for simplicity.
-    return 0.0;
+
+    return (1.0 - 0.5 * omegaLocal[id]) * (w[v] / SQ(c_s)) 
+            * ((force_xyz[id * dims + eX] + force_ibm[id * dims + eX]) * (c[v][eX] - u_n[id * dims + eX] + c[v][eX] * (c[v][eX] * u_n[id * dims + eX] + c[v][eY] * u_n[id * dims + eY]) / SQ(c_s))
+            + ((force_xyz[id * dims + eY] + force_ibm[id * dims + eY]) * (c[v][eY] - u_n[id * dims + eY] + c[v][eY] * (c[v][eX] * u_n[id * dims + eX] + c[v][eY] * u_n[id * dims + eY]) / SQ(c_s))));
 }
 
 // Apply boundary conditions
@@ -540,6 +542,11 @@ GridClass::GridClass() {
     u_n.resize(Nx * Ny * dims, 0.0);
     rho.resize(Nx * Ny, rho0);
     rho_n.resize(Nx * Ny, rho0);
+
+    omegaLocal.resize(Nx * Ny, omega);
+    force_xyz.resize(Nx * Ny * dims, 0.0);
+    force_ibm.resize(Nx * Ny * dims, 0.0);
+
     f.resize(Nx * Ny * nVels, 0.0);
     f_n.resize(Nx * Ny * nVels, 0.0);
     type.resize(Nx * Ny, eFluid);

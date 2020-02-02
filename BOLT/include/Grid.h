@@ -12,6 +12,7 @@ class GridClass {
 
     // Friend classes
     friend class ObjectsClass;
+    friend class IBMNodeClass;
 
 public:
 
@@ -50,6 +51,11 @@ private:
     std::vector<double> u_n;                // Velocity (start of timestep)
     std::vector<double> rho;                // Density
     std::vector<double> rho_n;              // Density (start of timestep)
+
+    std::vector<double> omegaLocal;         // Local omega value
+    std::vector<double> force_xyz;          // Cartestian force (pressure and gravity)
+    std::vector<double> force_ibm;          // Cartestian force (IBM)
+
     std::vector<double> f;                  // Populations
     std::vector<double> f_n;                // Populations (start of timestep)
     std::vector<eLatType> type;             // Lattice type matrix
