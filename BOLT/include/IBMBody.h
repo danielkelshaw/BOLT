@@ -13,18 +13,18 @@ class IBMNodeClass;
 // IBMBody Class
 class IBMBodyClass {
 
-	friend class ObjectsClass;
-	friend class IBMNodeClass;
+    friend class ObjectsClass;
+    friend class IBMNodeClass;
 
 // constructors / destructors
 public:
 
-	// default constructor / destructor
-	IBMBodyClass() {};
-	~IBMBodyClass() {};
+    // default constructor / destructor
+    IBMBodyClass() {};
+    ~IBMBodyClass() {};
 
-	// custom constructor for circle case
-	IBMBodyClass(ObjectsClass *objects, int bodyID, const std::vector<double> &pos, double radius);
+    // custom constructor for circle case
+    IBMBodyClass(ObjectsClass *objects, int bodyID, const std::vector<double> &pos, double radius);
 
 // public members
 public:
@@ -32,12 +32,12 @@ public:
 // private members
 private:
 
-	ObjectsClass *objectPtr;
+    ObjectsClass *objectPtr;
 
-	int ID;
-	eBodyType bodyType;
+    int ID;
+    eBodyType bodyType;
 
-	std::vector<IBMNodeClass> nodes;
+    std::vector<IBMNodeClass> nodes;
 };
 
 #endif

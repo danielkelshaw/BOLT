@@ -3,7 +3,7 @@
 
 IBMSupportClass::IBMSupportClass(int i, int j, double deltaVal) {
 
-	idx = i;
-	jdx = j;
-	diracVal = deltaVal;
+    idx = i;
+    jdx = j;
+    diracVal = deltaVal;
 }
