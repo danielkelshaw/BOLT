@@ -4,9 +4,11 @@
 // Includes
 #include "input.h"
 #include "Objects.h"
+#include "IBMNode.h"
 
 // forward declarations
 class ObjectsClass;
+class IBMNodeClass
 
 // IBMBody Class
 class IBMBodyClass {
@@ -31,6 +33,8 @@ private:
 
 	int ID;
 	eBodyType bodyType;
+
+	std::vector<IBMNodeClass> nodes;
 };
 
 
