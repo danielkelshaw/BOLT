@@ -3,19 +3,19 @@
 
 class IBMSupportClass {
 
-	friend class ObjectsClass;
-	friend class IBMNodeClass;
+    friend class ObjectsClass;
+    friend class IBMNodeClass;
 
 public:
 
-	IBMSupportClass(int i, int j, double deltaVal);
-	~IBMSupportClass() {};
+    IBMSupportClass(int i, int j, double deltaVal);
+    ~IBMSupportClass() {};
 
 private:
 
-	int idx;
-	int jdx;
-	double diracVal;
+    int idx;
+    int jdx;
+    double diracVal;
 
 };
 
