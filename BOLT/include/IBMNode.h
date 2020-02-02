@@ -2,12 +2,17 @@
 #define IBMNODE_H
 
 #include "input.h"
+#include "Utils.h"
+#include "Overloads.h"
 #include "IBMBody.h"
+#include "IBMSupport.h"
 
 // Forward declarations
 class IBMBodyClass;
 
 class IBMNodeClass {
+
+	friend class ObjectsClass;
 
 public:
 	IBMNodeClass(IBMBodyClass *ibmPtr, int nodeID, const std::vector<double> &pos);
@@ -30,7 +35,9 @@ private:
 
 	// interpolated values
 	std::vector<double> interp_mom;  // interpolated momentum
-	double interp_rho                // interpolated density
+	double interp_rho;               // interpolated density
+
+	std::vector<IBMSupportClass> supps;
 
 private:
 
@@ -40,7 +47,7 @@ private:
 	void interpolate();              // interpolation
 	void forceCalc();                // force calculation
 	void spread();                   // spread force back
-	void updateMacroscopic()         // update macroscopic values at supports
+	void updateMacroscopic();        // update macroscopic values at supports
 };
 
 #endif
