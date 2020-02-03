@@ -4,6 +4,7 @@
 // Includes
 #include "Grid.h"
 #include "IBMBody.h"
+#include "Utils.h"
 
 // Forward declaration
 class GridClass;
@@ -54,6 +55,7 @@ private:
 
     // initialisation
     void initialiseObjects();
+    void computeEpsilon();
 
     // input / output
     void readGeometry();
