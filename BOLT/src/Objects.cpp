@@ -3,107 +3,126 @@
 
 void ObjectsClass::readGeometry() {
 
-	// open config file
-	std::ifstream file;
-	file.open("input/geometry.config", std::ios::in);
+    // open config file
+    std::ifstream file;
+    file.open("input/geometry.config", std::ios::in);
 
-	// handle failure to open file
-	if (!file.is_open()) {
-		std::cout << "Error opening geometry config file..." << std::endl;
-		exit(-1);
-	}
+    // handle failure to open file
+    if (!file.is_open()) {
+        std::cout << "Error opening geometry config file..." << std::endl;
+        exit(-1);
+    }
 
-	// skip comments in config file
-	std::streamoff fileOffset;
-	std::string line;
-	file.seekg(std::ios::beg);
+    // skip comments in config file
+    std::streamoff fileOffset;
+    std::string line;
+    file.seekg(std::ios::beg);
 
-	do {
-		fileOffset = file.tellg();
-		std::getline(file, line);
-	} while (line[0] == '#' && !file.eof());
+    do {
+        fileOffset = file.tellg();
+        std::getline(file, line);
+    } while (line[0] == '#' && !file.eof());
 
-	// move cursor over comments
-	file.seekg(fileOffset, std::ios::beg);
+    // move cursor over comments
+    file.seekg(fileOffset, std::ios::beg);
 
-	std::string bodyCase;
+    std::string bodyCase;
 
-	// read in geometries
-	int bodyID = 0;
-	while (file) {
+    // read in geometries
+    int bodyID = 0;
+    while (file) {
 
-		// get type of body
-		file >> bodyCase;
+        // get type of body
+        file >> bodyCase;
 
-		int number;
-		file >> number;
+        int number;
+        file >> number;
 
-		std::vector<double> start(dims);
-		file >> start[eX];
-		file >> start[eY];
+        std::vector<double> start(dims);
+        file >> start[eX];
+        file >> start[eY];
 
-		std::vector<double> space(dims);
-		file >> space[eX];
-		file >> space[eY];
+        std::vector<double> space(dims);
+        file >> space[eX];
+        file >> space[eY];
 
-		if (bodyCase == "CIRCLE") {
+        if (bodyCase == "CIRCLE") {
 
-			double radius;
-			file >> radius;
+            double radius;
+            file >> radius;
 
-			for (int i = 0; i < number; i++) {
+            for (int i = 0; i < number; i++) {
 
-				std::vector<double> pos = {start[eX] + i * space[eX], start[eY] + i * space[eY]};
-				ibmBody.emplace_back(this, bodyID, pos, radius);
-				bodyID++;
-			}
+                std::vector<double> pos = {start[eX] + i * space[eX], start[eY] + i * space[eY]};
+                ibmBody.emplace_back(this, bodyID, pos, radius);
+                bodyID++;
+            }
 
-		}
-		else {
-			std::cout << "Only CIRCLE is supported at the moment..." << std::endl;
-			exit(-1);
-		}
+        }
+        else {
+            std::cout << "Only CIRCLE is supported at the moment..." << std::endl;
+            exit(-1);
+        }
 
-		bodyCase = "NONE";
-	}
+        bodyCase = "NONE";
+    }
 
-	if (ibmBody.size() > 0) {
-		hasIBM = true;
-	}
+    if (ibmBody.size() > 0) {
+        hasIBM = true;
+    }
 
-	if (hasIBM == true) {
-		std::cout << "found " << ibmBody.size() << " object(s)" << std::endl;
-	}
-	else if (hasIBM == false) {
-		std::cout << "no objects found" << std::endl;
-	}
+    if (hasIBM == true) {
+        std::cout << "found " << ibmBody.size() << " object(s)" << std::endl;
+    }
+    else if (hasIBM == false) {
+        std::cout << "no objects found" << std::endl;
+    }
 
 }
 
 void ObjectsClass::initialiseObjects() {
-	
+    
+    // Loop through all bodies
+    for (size_t b = 0; b < ibmBody.size(); b++) {
+
+        // Loop through all nodes
+        for (size_t n = 0; n < ibmBody[b].node.size(); n++) {
+
+            idxIBM.push_back({b, n});
+
+            ibmBody[ib].node[n].findSupport();
+            ibmBody[ib].node[n].computeDs();
+
+        }
+    }
+
+    computeEpsilon();
+}
+
+void ObjectsClass::computeEpsilon() {
+    
 }
 
 ObjectsClass::ObjectsClass(GridClass &grid) {
 
-	std::cout << "Initialising Objects..." << std::endl;
+    std::cout << "Initialising Objects..." << std::endl;
 
-	// Set pointers
-	gridPtr = &grid;
-	gridPtr->objectPtr = this;
+    // Set pointers
+    gridPtr = &grid;
+    gridPtr->objectPtr = this;
 
-	// Initial sub-iteration values
-	subIt = 0;
-	subRes = 0.0;
-	relax = 1.0;
-	subNum = 0.0;
-	subDen = 0.0;
+    // Initial sub-iteration values
+    subIt = 0;
+    subRes = 0.0;
+    relax = 1.0;
+    subNum = 0.0;
+    subDen = 0.0;
 
-	hasIBM = false;
+    hasIBM = false;
 
-	// Read in geometry
-	readGeometry();
+    // Read in geometry
+    readGeometry();
 
-	// Initialise objects
-	initialiseObjects();
+    // Initialise objects
+    initialiseObjects();
 }
