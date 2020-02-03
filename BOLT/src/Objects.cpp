@@ -86,12 +86,12 @@ void ObjectsClass::initialiseObjects() {
     for (size_t b = 0; b < ibmBody.size(); b++) {
 
         // Loop through all nodes
-        for (size_t n = 0; n < ibmBody[b].node.size(); n++) {
+        for (size_t n = 0; n < ibmBody[b].nodes.size(); n++) {
 
             idxIBM.push_back({b, n});
 
-            ibmBody[ib].node[n].findSupport();
-            ibmBody[ib].node[n].computeDs();
+            ibmBody[b].nodes[n].findSupport();
+            ibmBody[b].nodes[n].computeDs();
 
         }
     }
@@ -100,7 +100,47 @@ void ObjectsClass::initialiseObjects() {
 }
 
 void ObjectsClass::computeEpsilon() {
-    
+
+    std::vector<IBMBodyClass> *ibmBodyPtr = &ibmBody;
+
+    double Dx = gridPtr->Dx;
+
+    // Loop through each body
+    for (size_t b = 0; b < ibmBodyPtr->size(); b++) {
+
+        if (gridPtr->t == 0) {
+
+            size_t dim = (*ibmBodyPtr)[b].nodes.size();
+
+            std::vector<double> A(dim * dim, 0.0);
+
+            for (size_t i = 0; i < dim; i++) {
+                for (size_t j = 0; j < dim; j++) {
+
+                    for (size_t s = 0; s < (*ibmBodyPtr)[b].nodes[i].supps.size(); s++) {
+
+                        double diracVal_i = (*ibmBodyPtr)[b].nodes[i].supps[s].diracVal;
+
+                        double distX = fabs((*ibmBodyPtr)[b].nodes[j].pos[eX] / Dx - (*ibmBodyPtr)[b].nodes[i].supps[s].idx);
+                        double distY = fabs((*ibmBodyPtr)[b].nodes[j].pos[eY] / Dx - (*ibmBodyPtr)[b].nodes[i].supps[s].jdx);
+                        double diracVal_j = Utils::diracDelta(distX) * Utils::diracDelta(distY);
+
+                        A[i * dims + j] += diracVal_i * diracVal_j;
+
+                    }
+
+                    A[i * dims + j] *= (*ibmBodyPtr)[b].nodes[j].ds;
+                }
+            }
+
+            std::vector<double> b_vec(dim, 1.0);
+            std::vector<double> epsilon = Utils::solveLAPACK(A, b_vec);
+
+            for (size_t i = 0; i < dim; i++) {
+                (*ibmBodyPtr)[b].nodes[i].epsilon = epsilon[i];
+            }
+        }
+    }
 }
 
 ObjectsClass::ObjectsClass(GridClass &grid) {

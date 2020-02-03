@@ -3,7 +3,7 @@
 ### **Compilation Instructions:**
 From within the ```BOLT``` directory enter the command:
 
-```g++ --std=c++11 src/*```
+```g++ --std=c++0x -llapack -lblas src/*```
 
 This will generate an output file: ```a.out```
 

@@ -52,3 +52,33 @@ double Utils::diracDelta(double dist) {
         return (1.0 + sqrt(1.0 - 3.0 * SQ(absDist))) / 3.0;
     }
 }
+
+std::vector<double> Utils::solveLAPACK(std::vector<double> A, std::vector<double> b, int BC) {
+
+    // Set up the correct values
+    char trans = 'T';
+    
+    int dim = static_cast<int>(sqrt(static_cast<int>(A.size())));
+
+    int row = dim - BC;
+    int col = dim - BC;
+
+    int offset = BC * dim + BC;
+    int nrhs = 1;
+
+    int LDA = dim;
+    int LDB = dim;
+
+    int info;
+    std::vector<int> ipiv(row, 0);
+
+    // Factorise and solve
+    dgetrf_(&row, &col, A.data() + offset, &LDA, ipiv.data(), &info);
+    dgetrs_(&trans, &row, &nrhs, A.data() + offset, &LDA, ipiv.data(), b.data() + BC, &LDB, &info);
+
+    // Set return values not included to zero
+    fill(b.begin(), b.begin() + BC, 0.0);
+
+    // Return RHS
+    return b;
+}
