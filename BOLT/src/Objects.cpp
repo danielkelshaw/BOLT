@@ -16,9 +16,9 @@ void ObjectsClass::ibmKernel() {
         size_t ib = idxIBM[i][0];
         size_t n = idxIBM[i][1];
 
-        ibmBody[ib].node[n].interpolate();
-        ibmBody[ib].node[n].forceCalc();
-        ibmBody[ib].node[n].spread();
+        ibmBody[ib].nodes[n].interpolate();
+        ibmBody[ib].nodes[n].forceCalc();
+        ibmBody[ib].nodes[n].spread();
     }
 
     for (size_t i = 0; i < idxIBM.size(); i++) {
@@ -26,7 +26,7 @@ void ObjectsClass::ibmKernel() {
         size_t ib = idxIBM[i][0];
         size_t n = idxIBM[i][1];
 
-        ibmBody[ib].node[n].updateMacroscopic();
+        ibmBody[ib].nodes[n].updateMacroscopic();
     }
 }
 
