@@ -1,6 +1,12 @@
 // Includes
 #include "../include/Objects.h"
 
+void ObjectsClass::objectKernel() {
+
+    // At the moment only considering IBM.
+    ibmKernel();
+}
+
 void ObjectsClass::ibmKernel() {
 
     fill(gridPtr->force_ibm.begin(), gridPtr->force_ibm.begin(), 0.0);
