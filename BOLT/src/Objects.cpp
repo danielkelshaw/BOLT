@@ -1,6 +1,29 @@
 // Includes
 #include "../include/Objects.h"
 
+void ObjectsClass::ibmKernel() {
+
+    fill(gridPtr->force_ibm.begin(), gridPtr->force_ibm.begin(), 0.0);
+
+    for (size_t i = 0; i < idxIBM.size(); i++) {
+
+        size_t ib = idxIBM[i][0];
+        size_t n = idxIBM[i][1];
+
+        ibmBody[ib].node[n].interpolate();
+        ibmBody[ib].node[n].forceCalc();
+        ibmBody[ib].node[n].spread();
+    }
+
+    for (size_t i = 0; i < idxIBM.size(); i++) {
+
+        size_t ib = idxIBM[i][0];
+        size_t n = idxIBM[i][1];
+
+        ibmBody[ib].node[n].updateMacroscopic();
+    }
+}
+
 void ObjectsClass::readGeometry() {
 
     // open config file
