@@ -4,7 +4,14 @@
 
 // Main solver
 void GridClass::solver() {
+
+    // Run Grid Kernel
     lbmKernel();
+
+    // Run Object Kernel
+    if (objectPtr->hasIBM == true) {
+        objectPtr->objectKernel();
+    }
 }
 
 // Main LBM Kernel
@@ -288,6 +295,8 @@ void GridClass::writeInfo() {
             int id = i * Ny + j;
 
             // Calculate basic vector magnitude
+            st::cout << "xvel: " << u[id * dims + eX] << "   yvel: " << u[id * dims + eY] << std::endl;
+
             double vel = std::sqrt(SQ(u[id * dims + eX]) + SQ(u[id * dims + eY]));
 
             if (vel > maxVel) {

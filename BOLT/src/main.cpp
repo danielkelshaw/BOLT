@@ -1,9 +1,11 @@
 #include "../include/Grid.h"
+#include "../include/Objects.h"
 
 int main() {
     std::cout << "BOLT: LBM Simulator" << std::endl;
 
     GridClass grid;
+    ObjectsClass objects(grid);
 
     for (grid.t = 0; grid.t <= nSteps; grid.t++) {
         grid.solver();

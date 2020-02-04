@@ -50,6 +50,7 @@ void ObjectsClass::readGeometry() {
     do {
         fileOffset = file.tellg();
         std::getline(file, line);
+
     } while (line[0] == '#' && !file.eof());
 
     // move cursor over comments
@@ -87,10 +88,6 @@ void ObjectsClass::readGeometry() {
                 bodyID++;
             }
 
-        }
-        else {
-            std::cout << "Only CIRCLE is supported at the moment..." << std::endl;
-            exit(-1);
         }
 
         bodyCase = "NONE";
