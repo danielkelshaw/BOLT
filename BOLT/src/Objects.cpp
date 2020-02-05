@@ -9,7 +9,7 @@ void ObjectsClass::objectKernel() {
 
 void ObjectsClass::ibmKernel() {
 
-    fill(gridPtr->force_ibm.begin(), gridPtr->force_ibm.begin(), 0.0);
+    fill(gridPtr->force_ibm.begin(), gridPtr->force_ibm.end(), 0.0);
 
     for (size_t i = 0; i < idxIBM.size(); i++) {
 
@@ -27,6 +27,15 @@ void ObjectsClass::ibmKernel() {
         size_t n = idxIBM[i][1];
 
         ibmBody[ib].nodes[n].updateMacroscopic();
+    }
+}
+
+void ObjectsClass::resetPointers() {
+
+    for (size_t ib = 0; ib < ibmBody.size(); ib++) {
+        for (size_t n = 0; n < ibmBody[ib].nodes.size(); n++) {
+            ibmBody[ib].nodes[n].ibmPtr = &ibmBody[ib];
+        }
     }
 }
 
@@ -93,6 +102,8 @@ void ObjectsClass::readGeometry() {
         bodyCase = "NONE";
     }
 
+    resetPointers();
+
     if (ibmBody.size() > 0) {
         hasIBM = true;
     }
@@ -127,35 +138,37 @@ void ObjectsClass::initialiseObjects() {
 
 void ObjectsClass::computeEpsilon() {
 
-    std::vector<IBMBodyClass> *ibmBodyPtr = &ibmBody;
-
     double Dx = gridPtr->Dx;
 
     // Loop through each body
-    for (size_t b = 0; b < ibmBodyPtr->size(); b++) {
+    for (size_t ib = 0; ib < ibmBody.size(); ib++) {
 
         if (gridPtr->t == 0) {
 
-            size_t dim = (*ibmBodyPtr)[b].nodes.size();
+            size_t dim = ibmBody[ib].nodes.size();
 
             std::vector<double> A(dim * dim, 0.0);
 
+            // Loop through all nodes
             for (size_t i = 0; i < dim; i++) {
                 for (size_t j = 0; j < dim; j++) {
 
-                    for (size_t s = 0; s < (*ibmBodyPtr)[b].nodes[i].supps.size(); s++) {
+                    // Now loop through all support markers for node i
+                    for (size_t s = 0; s < ibmBody[ib].nodes[i].supps.size(); s++) {
 
-                        double diracVal_i = (*ibmBodyPtr)[b].nodes[i].supps[s].diracVal;
+                        // Dirac delta value of support marker for node i and support s
+                        double diracVal_i = ibmBody[ib].nodes[i].supps[s].diracVal;
 
-                        double distX = fabs((*ibmBodyPtr)[b].nodes[j].pos[eX] / Dx - (*ibmBodyPtr)[b].nodes[i].supps[s].idx);
-                        double distY = fabs((*ibmBodyPtr)[b].nodes[j].pos[eY] / Dx - (*ibmBodyPtr)[b].nodes[i].supps[s].jdx);
+                        double distX = fabs(ibmBody[ib].nodes[j].pos[eX] / Dx - ibmBody[ib].nodes[i].supps[s].idx);
+                        double distY = fabs(ibmBody[ib].nodes[j].pos[eY] / Dx - ibmBody[ib].nodes[i].supps[s].jdx);
                         double diracVal_j = Utils::diracDelta(distX) * Utils::diracDelta(distY);
 
-                        A[i * dims + j] += diracVal_i * diracVal_j;
-
+                        // Add to A matrix
+                        A[i * dim + j] += diracVal_i * diracVal_j;
                     }
 
-                    A[i * dims + j] *= (*ibmBodyPtr)[b].nodes[j].ds;
+                    // Mulitply by volume
+                    A[i * dim + j] *= ibmBody[ib].nodes[j].ds;
                 }
             }
 
@@ -163,7 +176,7 @@ void ObjectsClass::computeEpsilon() {
             std::vector<double> epsilon = Utils::solveLAPACK(A, b_vec);
 
             for (size_t i = 0; i < dim; i++) {
-                (*ibmBodyPtr)[b].nodes[i].epsilon = epsilon[i];
+                ibmBody[ib].nodes[i].epsilon = epsilon[i];
             }
         }
     }

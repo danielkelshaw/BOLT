@@ -15,11 +15,11 @@ void IBMNodeClass::findSupport() {
     int i_near = static_cast<int>(round(pos[eX] / Dx));
     int j_near = static_cast<int>(round(pos[eY] / Dx));
 
-    for (int i = i_near - 2; i < i_near + 2; i++) {
+    for (int i = i_near - 2; i <= i_near + 2; i++) {
 
         double distX = fabs(pos[eX] / Dx - i);
 
-        for (int j = j_near - 2; j < j_near + 2; j++) {
+        for (int j = j_near - 2; j <= j_near + 2; j++) {
 
             double distY = fabs(pos[eY] / Dx - j);
 
@@ -41,7 +41,7 @@ void IBMNodeClass::computeDs() {
         // Don't check self
         if (ID != ibmPtr->nodes[n].ID) {
 
-            double mag = sqrt((pos - ibmPtr->nodes[n].pos) * (pos - ibmPtr->nodes[n].pos)) / ibmPtr->objectPtr->gridPtr->Dx;
+            double mag = std::sqrt((pos - ibmPtr->nodes[n].pos) * (pos - ibmPtr->nodes[n].pos)) / ibmPtr->objectPtr->gridPtr->Dx;
 
             if (mag < current_Ds) {
                 current_Ds = mag;
@@ -114,8 +114,8 @@ void IBMNodeClass::updateMacroscopic() {
 
         for (int v = 0; v < nVels; v++) {
             rhoTmp += gridPtr->f[id * nVels + v];
-            uTmp   += gridPtr->c[v][eX] * gridPtr->f[id * nVels + v];
-            uTmp   += gridPtr->c[v][eY] * gridPtr->f[id * nVels + v];
+            uTmp += gridPtr->c[v][eX] * gridPtr->f[id * nVels + v];
+            vTmp += gridPtr->c[v][eY] * gridPtr->f[id * nVels + v];
         }
 
         uTmp = (uTmp + 0.5 * (gridPtr->force_xyz[id * dims + eX] + gridPtr->force_ibm[id * dims + eX])) / rhoTmp;
