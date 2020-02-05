@@ -4,7 +4,14 @@
 
 // Main solver
 void GridClass::solver() {
+
+    // Run Grid Kernel
     lbmKernel();
+
+    // Run Object Kernel
+    if (objectPtr->hasIBM == true) {
+        objectPtr->objectKernel();
+    }
 }
 
 // Main LBM Kernel
@@ -50,7 +57,7 @@ void GridClass::streamCollide(int i, int j, int id) {
 
     for (int v = 0; v < nVels; v++) {
         int src_id = ((i - c[v][eX] + Nx) % Nx) * Ny + ((j - c[v][eY] + Ny) % Ny);
-        f[id * nVels + v] = f_n[src_id * nVels + v] + omega * (equilibrium(src_id, v) - f_n[src_id * nVels + v]) + latticeForce(src_id, v);
+        f[id * nVels + v] = f_n[src_id * nVels + v] + omegaLocal[src_id] * (equilibrium(src_id, v) - f_n[src_id * nVels + v]) + latticeForce(src_id, v);
     }
 }
 
@@ -79,8 +86,8 @@ void GridClass::macroscopic(int id) {
     }
 
     // Divide momentum by rho to calculate velocity
-    u[id * dims + eX] = u[id * dims + eX] / rho[id];
-    u[id * dims + eY] = u[id * dims + eY] / rho[id];
+    u[id * dims + eX] = (u[id * dims + eX] + 0.5 * force_xyz[id * dims + eX]) / rho[id];
+    u[id * dims + eY] = (u[id * dims + eY] + 0.5 * force_xyz[id * dims + eY]) / rho[id];
 }
 
 // Calculate lattice force
@@ -513,6 +520,8 @@ GridClass::GridClass() {
 
     // Output message
     std::cout << "Initialising GridClass." << std::endl;
+
+    objectPtr = NULL;
 
     // Default parameters
     double rho0 = 1.0;

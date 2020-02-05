@@ -5,6 +5,7 @@
 #include "Grid.h"
 #include "IBMBody.h"
 #include "Utils.h"
+#include "Overloads.h"
 
 // Forward declaration
 class GridClass;
@@ -59,6 +60,7 @@ private:
 
     // input / output
     void readGeometry();
+    void resetPointers();
 };
 
 #endif

@@ -1,11 +1,13 @@
 #include "../include/Grid.h"
+#include "../include/Objects.h"
 
 int main() {
     std::cout << "BOLT: LBM Simulator" << std::endl;
 
     GridClass grid;
+    ObjectsClass objects(grid);
 
-    for (grid.t = 0; grid.t <= nSteps; grid.t++) {
+    for (grid.t = 1; grid.t <= nSteps; grid.t++) {
         grid.solver();
 
         // Write out information every tinfo steps

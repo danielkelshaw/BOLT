@@ -8,6 +8,7 @@ class IBMSupportClass {
 
 public:
 
+	IBMSupportClass() {idx = 0; jdx = 0; diracVal = 0.0;};
     IBMSupportClass(int i, int j, double deltaVal);
     ~IBMSupportClass() {};
 

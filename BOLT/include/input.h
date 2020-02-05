@@ -15,7 +15,7 @@ const int resolution = 1;
 
 // Lattice domain
 const int Nx = 256;     // Number of lattice sites in x-direction
-const int Ny = 128;     // Number of lattice sites in y-direction
+const int Ny = 256;     // Number of lattice sites in y-direction
 
 // Physical domain
 const double height_p = 1.0;        // Height of domain (m)
@@ -27,8 +27,8 @@ const double nu_p = 1.5111e-2;      // Fluid viscosity (m^2/s)
 #define WALL_BOTTOM  eVelocity      // Boundary condition at bottom wall
 #define WALL_TOP     eVelocity      // Boundary condition at top wall
 
-#define PROFILE eParabolic          // Inlet velocity profile
-#define BLOCK (1.0 / 3.0)           // Blockage ratio
+// #define PROFILE eParabolic          // Inlet velocity profile
+// #define BLOCK (1.0 / 3.0)           // Blockage ratio
 
 // Initial conditions
 const double ux0_p = 5.0;           // Initial x-velocity (m/s)
