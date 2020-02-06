@@ -182,6 +182,60 @@ void ObjectsClass::computeEpsilon() {
     }
 }
 
+void ObjectsClass::writeVTK() {
+
+    if (hasIBM == true) {
+
+        std::ofstream output;
+        output.precision(PRECISION);
+        output.open("Results/VTK/IBM." + std::to_string(gridPtr->t) + ".vtk");
+
+        // Write VTK header
+        output << "# vtk DataFile Version 3.0\n";
+        output << "IBM\n";
+        output << "ASCII\n";
+        output << "DATASET POLYDATA\n";
+
+        size_t totalNodes = 0;
+        size_t totalElements = 0;
+
+        for (size_t ib = 0; ib < ibmBody.size(); ib++) {
+
+            totalNodes += ibmBody[ib].nodes.size();
+
+            if (ibmBody[ib].bodyType == eCircle) {
+                totalElements += ibmBody[ib].nodes.size();
+            }
+        }
+
+        output << "POINTS " << totalNodes << " double\n";
+
+        for (size_t ib = 0; ib < ibmBody.size(); ib++) {
+            for (size_t n = 0; n < ibmBody[ib].nodes.size(); n++) {
+                output << ibmBody[ib].nodes[n].pos[eX] << " " << ibmBody[ib].nodes[n].pos[eY] << " 1\n";
+            }
+        }
+
+        output << "LINES " << totalElements << " " << 3 * totalElements << "\n";
+
+        size_t bodyOffset = 0;
+        for (size_t ib = 0; ib < ibmBody.size(); ib++) {
+            size_t nElements = 0;
+
+            if (ibmBody[ib].bodyType == eCircle) {
+                nElements = ibmBody[ib].nodes.size();
+            }
+
+            for (size_t el = 0; el < nElements; el++) {
+                output << "2 " << bodyOffset + (el % ibmBody[ib].nodes.size())  << " " << bodyOffset + ((el + 1) % ibmBody[ib].nodes.size()) << "\n";
+            }
+            bodyOffset += ibmBody[ib].nodes.size();
+        }
+
+        output.close();
+    }
+}
+
 ObjectsClass::ObjectsClass(GridClass &grid) {
 
     std::cout << "Initialising Objects..." << std::endl;
