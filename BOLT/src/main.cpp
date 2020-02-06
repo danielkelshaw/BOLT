@@ -18,6 +18,7 @@ int main() {
         // Write VTK every tVTK steps
         if (grid.t % tVTK == 0) {
             grid.writeVTK();
+            objects.writeVTK();
         }
     }
 }

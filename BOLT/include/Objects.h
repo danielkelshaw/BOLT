@@ -48,6 +48,8 @@ public:
     // object routines
     void objectKernel();    // main kernel for objects
 
+    void writeVTK();        // write IBM VTK file
+
 // private methods
 private:
 
