@@ -182,6 +182,36 @@ void ObjectsClass::computeEpsilon() {
     }
 }
 
+void ObjectsClass::writeForces() {
+
+    if (hasIBM == true) {
+
+        std::string fname = "Results/TotalForce.csv";
+
+        std::ofstream output;
+        output.open(fname.c_str(), std::ios::app);
+        output.precision(PRECISION);
+
+        double forceScale = gridPtr->Dm * gridPtr->Dx / SQ(gridPtr->Dt) * 1.0 / gridPtr->Dx;
+
+        std::vector<double> force(dims, 0.0);
+
+        for (size_t ib = 0; ib < ibmBody.size(); ib++) {
+            for (size_t n = 0; n < ibmBody[ib].nodes.size(); n++) {
+                for (int d = 0; d < dims; d++) {
+                    force[d] -=ibmBody[ib].nodes[n].force[d] * ibmBody[ib].nodes[n].epsilon * ibmBody[ib].nodes[n].ds * forceScale;
+                }
+            }
+        }
+
+        double ND = 0.5 * ref_rho * SQ(ref_U) * ref_L;
+
+        output << std::endl << gridPtr->t << "," << gridPtr->Dt * gridPtr->t << "," << force[eX] << "," << force[eY] << "," << force[eX] / ND << "," << force[eY] / ND; 
+        output.close();
+    }
+
+}
+
 void ObjectsClass::writeVTK() {
 
     if (hasIBM == true) {
