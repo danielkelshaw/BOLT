@@ -49,6 +49,7 @@ public:
     void objectKernel();    // main kernel for objects
 
     void writeVTK();        // write IBM VTK file
+    void writeForces();      // write forces to file
 
 // private methods
 private:
