@@ -3,11 +3,11 @@
 ### **Compilation Instructions:**
 From within the ```BOLT``` directory enter the command:
 
-```g++ --std=c++0x -llapack -lblas src/*```
+```g++ --std=c++0x src/* -llapack -o BOLT```
 
-This will generate an output file: ```a.out```
+This will generate an output file: ```BOLT```
 
-**Run the Simulator:** ```./a.out```
+**Run the Simulator:** ```./BOLT```
 
 ### **Altering Parameters:**
 The majority of user-defined variables are stored in: ```BOLT/include/input.h``` - upon altering any parameter the code needs to be recompiled before running to ensure changes are reflected in the output.
