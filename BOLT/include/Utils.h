@@ -2,7 +2,6 @@
 #define UTILS_H
 
 #include "input.h"
-#include <Accelerate/Accelerate.h>
 
 namespace Utils {
 
@@ -14,7 +13,7 @@ std::vector<double> solveLAPACK(std::vector<double> A, std::vector<double> b, in
 }
 
 // LAPACK interfaces - Included in <Accelerate/Accelerate.h>
-// extern "C" void dgetrf_(int* dim1, int* dim2, double* a, int* lda, int* ipiv, int* info);
-// extern "C" void dgetrs_(char *TRANS, int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO );
+extern "C" void dgetrf_(int* dim1, int* dim2, double* a, int* lda, int* ipiv, int* info);
+extern "C" void dgetrs_(char *TRANS, int *N, int *NRHS, double *A, int *LDA, int *IPIV, double *B, int *LDB, int *INFO );
 
 #endif
