@@ -5,5 +5,6 @@ WORKDIR /workspace/
 RUN apt-get update
 RUN apt-get install -y g++
 RUN apt-get install -y libblas-dev liblapack-dev
+RUN apt-get install -y make
 
-RUN g++ --std=c++0x BOLT/src/* -llapack -o BOLT/run
+RUN make --directory /workspace/BOLT/
