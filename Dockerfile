@@ -3,8 +3,13 @@ COPY ./BOLT /workspace/BOLT
 WORKDIR /workspace/
 
 RUN apt-get update
-RUN apt-get install -y g++
-RUN apt-get install -y libblas-dev liblapack-dev
-RUN apt-get install -y make
+RUN apt-get install -y sudo
 
-RUN make --directory /workspace/BOLT/
+RUN sudo apt-get install -y g++
+RUN sudo apt-get install -y make
+
+RUN sudo apt-get install -y libblas-dev 
+RUN sudo apt-get install -y liblapack-dev
+RUN sudo apt-get install -y libboost-all-dev
+
+RUN make --directory BOLT/

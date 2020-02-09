@@ -13,7 +13,7 @@ OBJECTDIR=$(DIR)/obj
 SRCS:=$(wildcard $(SOURCEDIR)/*.cpp)
 OBJS:=$(addprefix $(OBJECTDIR)/, $(notdir $(SRCS:.cpp=.o)))
 
-LIB=-llapack
+LIB=-llapack -lboost_system -lboost_filesystem
 
 # Build BOLT
 $(EXE): $(OBJS)

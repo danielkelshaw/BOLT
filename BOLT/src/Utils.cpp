@@ -1,6 +1,21 @@
 // Includes
 #include "../include/Utils.h"
 
+void Utils::createDirectories() {
+
+    boost::filesystem::remove_all("Results");
+
+    if (!boost::filesystem::create_directory("Results")) {
+        std::cout << "Problem creating Results directory..." << std::endl;
+        exit(-1);
+    }
+
+    if (!boost::filesystem::create_directory("Results/VTK")) {
+        std::cout << "Problem creating Results/VTK directory..." << std::endl;
+        exit(-1);
+    }
+}
+
 double Utils::extrapolate(const std::vector<double> &vec, const std::vector<int> &normal, int order, int i, int j, int d, int dims) {
 
     // Implements basic methods for extrapolation
