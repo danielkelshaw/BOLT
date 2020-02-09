@@ -521,6 +521,9 @@ GridClass::GridClass() {
     // Output message
     std::cout << "Initialising GridClass." << std::endl;
 
+    // Create directories
+    Utils::createDirectories()
+
     objectPtr = NULL;
 
     // Default parameters

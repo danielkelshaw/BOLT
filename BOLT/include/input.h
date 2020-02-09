@@ -9,6 +9,7 @@
 #include <vector>
 #include <numeric>
 #include <chrono>
+#include <boost/filesystem.hpp>
 
 // Set resolution
 const int resolution = 1;
