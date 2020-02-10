@@ -12,6 +12,6 @@ The majority of user-defined variables are stored in: ```BOLT/include/input.h```
 
 ### **Docker Usage:**
 
-Build the image: ```docker build -ti <image_name>:<tag> .```
+Build the image: ```docker build -t <image_name>:<tag> .```
 <br>
 Run the image: ```docker run -ti --rm --name <name> <image_name>:<tag>```
