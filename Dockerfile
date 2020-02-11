@@ -2,6 +2,8 @@ FROM ubuntu:18.04
 COPY ./BOLT /workspace/BOLT
 WORKDIR /workspace/
 
+RUN mkdir /workspace/BOLT/obj
+
 RUN apt-get update
 RUN apt-get install -y sudo
 
