@@ -522,7 +522,7 @@ GridClass::GridClass() {
     std::cout << "Initialising GridClass." << std::endl;
 
     // Create directories
-    Utils::createDirectories()
+    Utils::createDirectories();
 
     objectPtr = NULL;
 
