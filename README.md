@@ -1,5 +1,9 @@
 # **BOLT:** Lattice Boltzmann Simulator
 
+<p align='center'>
+<img src="media/output_fluid.png" width="500" height="450" />
+</p>
+
 ### **Compilation Instructions:**
 From within the ```BOLT``` directory, compile with: ```make```
 <br>
