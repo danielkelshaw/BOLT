@@ -1,7 +1,7 @@
 # **BOLT:** Lattice Boltzmann Simulator
 
 <p align='center'>
-<img src="media/output_fluid.png"/>
+<img src="media/readme_plot.png"/>
 </p>
 
 ### **Compilation Instructions:**
