@@ -26,29 +26,35 @@ void GridClass::lbmKernel() {
     u_n.swap(u);
     rho_n.swap(rho);
 
-    // Iterate through all points
-    for (int i = 0; i < Nx; i++) {
-        for (int j = 0; j < Ny; j++) {
+#pragma omp parallel
+    {
 
-            int id = i * Ny + j;
+#pragma omp for schedule(guided) collapse(2)
+        // Iterate through all points
+        for (int i = 0; i < Nx; i++) {
+            for (int j = 0; j < Ny; j++) {
 
-            streamCollide(i, j, id);
+                int id = i * Ny + j;
 
-            if (type[id] == eFluid) {
-                macroscopic(id);
+                streamCollide(i, j, id);
+
+                if (type[id] == eFluid) {
+                    macroscopic(id);
+                }
             }
         }
-    }
 
-    // Apply BCs to all points
-    for (int b = 0; b < BCVec.size(); b++) {
+#pragma omp for schedule(guided)
+        // Apply BCs to all points
+        for (int b = 0; b < BCVec.size(); b++) {
 
-        int id = BCVec[b];
-        int i = id / Ny;
-        int j = id - (i * Ny);
+            int id = BCVec[b];
+            int i = id / Ny;
+            int j = id - (i * Ny);
 
-        applyBC(i, j, id);
-        macroscopic(id);
+            applyBC(i, j, id);
+            macroscopic(id);
+        }
     }
 }
 

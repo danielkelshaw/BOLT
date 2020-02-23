@@ -1,7 +1,7 @@
 # BOLT makefile
 
 CC=g++
-CFLAGS=--std=c++0x -Wall
+CFLAGS=--std=c++0x -Wall -fopenmp
 
 EXE=BOLT
 

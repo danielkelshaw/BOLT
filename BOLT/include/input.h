@@ -2,6 +2,7 @@
 #define INPUT_H
 
 // Include relevant headers
+#include <omp.h>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -10,6 +11,9 @@
 #include <numeric>
 #include <chrono>
 #include <boost/filesystem.hpp>
+
+#define THREADS 4
+#define ORDERED
 
 // Set resolution
 const int resolution = 1;
