@@ -11,22 +11,33 @@ void ObjectsClass::ibmKernel() {
 
     fill(gridPtr->force_ibm.begin(), gridPtr->force_ibm.end(), 0.0);
 
-    for (size_t i = 0; i < idxIBM.size(); i++) {
+#pragma omp parallel
+    {
 
-        size_t ib = idxIBM[i][0];
-        size_t n = idxIBM[i][1];
+#ifdef ORDERED
+    #pragma omp for ordered schedule(static, 1)
+#else
+    #pragma omp for schedule(guided)
+#endif
 
-        ibmBody[ib].nodes[n].interpolate();
-        ibmBody[ib].nodes[n].forceCalc();
-        ibmBody[ib].nodes[n].spread();
-    }
+        for (size_t i = 0; i < idxIBM.size(); i++) {
 
-    for (size_t i = 0; i < idxIBM.size(); i++) {
+            size_t ib = idxIBM[i][0];
+            size_t n = idxIBM[i][1];
 
-        size_t ib = idxIBM[i][0];
-        size_t n = idxIBM[i][1];
+            ibmBody[ib].nodes[n].interpolate();
+            ibmBody[ib].nodes[n].forceCalc();
+            ibmBody[ib].nodes[n].spread();
+        }
 
-        ibmBody[ib].nodes[n].updateMacroscopic();
+#pragma omp for schedule(guided)
+        for (size_t i = 0; i < idxIBM.size(); i++) {
+
+            size_t ib = idxIBM[i][0];
+            size_t n = idxIBM[i][1];
+
+            ibmBody[ib].nodes[n].updateMacroscopic();
+        }
     }
 }
 
@@ -140,6 +151,8 @@ void ObjectsClass::computeEpsilon() {
 
     double Dx = gridPtr->Dx;
 
+#pragma omp parallel for schedule(guided)
+    
     // Loop through each body
     for (size_t ib = 0; ib < ibmBody.size(); ib++) {
 

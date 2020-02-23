@@ -4,6 +4,12 @@
 int main() {
     std::cout << "BOLT: LBM Simulator" << std::endl;
 
+    double start = omp_get_wtime();
+
+#ifdef THREADS
+    omp_set_num_threads(THREADS);
+#endif
+
     GridClass grid;
     ObjectsClass objects(grid);
 
@@ -23,4 +29,9 @@ int main() {
             objects.writeForces();
         }
     }
+
+    std::cout << "Simulation Finished." << std::endl;
+
+    double end = omp_get_wtime();
+    std::cout << "Simulation took " << end - start << " secs" << std::endl;
 }

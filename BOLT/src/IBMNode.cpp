@@ -94,8 +94,19 @@ void IBMNodeClass::spread() {
         double Fx = force[eX] * epsilon * ds * supps[s].diracVal;
         double Fy = force[eY] * epsilon * ds * supps[s].diracVal;
 
+#ifdef ORDERED
+#pragma omp ordered
+        {
+            gridPtr->force_ibm[id * dims + eX] += Fx;
+            gridPtr->force_ibm[id * dims + eY] += Fy;
+        }
+
+#else
+#pragma omp atomic update
         gridPtr->force_ibm[id * dims + eX] += Fx;
+#pragma omp atomic update
         gridPtr->force_ibm[id * dims + eY] += Fy;
+#endif
     }
 }
 
@@ -121,9 +132,15 @@ void IBMNodeClass::updateMacroscopic() {
         uTmp = (uTmp + 0.5 * (gridPtr->force_xyz[id * dims + eX] + gridPtr->force_ibm[id * dims + eX])) / rhoTmp;
         vTmp = (vTmp + 0.5 * (gridPtr->force_xyz[id * dims + eY] + gridPtr->force_ibm[id * dims + eY])) / rhoTmp;
 
+#pragma omp atomic write
         gridPtr->rho[id] = rhoTmp;
+
+#pragma omp atomic write
         gridPtr->u[id * dims + eX] = uTmp;
+
+#pragma omp atomic write
         gridPtr->u[id * dims + eY] = vTmp;
+
     }   
 }
 
